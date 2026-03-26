@@ -191,7 +191,7 @@ body {
   color: var(--text-dark);
 }
 
-/* Cloud divider at hero bottom */
+
 .cloud-divider {
   position: absolute;
   bottom: -2px;
@@ -207,7 +207,7 @@ body {
   mask-size: cover;
 }
 
-/* FEATURE CARDS SECTION */
+
 .features-section {
   padding: 50px 40px 20px;
   background: var(--cloud-white);
@@ -232,13 +232,13 @@ body {
   box-shadow: 0 12px 36px rgba(180, 120, 160, .18);
 }
 
-/* Active / highlighted card */
+
 .feature-card--active {
   border-color: rgba(232, 115, 138, .25);
   background: linear-gradient(135deg, #fff5f7, #fff);
 }
 
-/* Icon wrapper */
+
 .feature-icon-wrap {
   width: 80px;
   height: 72px;
@@ -252,7 +252,7 @@ body {
   overflow: hidden;
 }
 
-/* Individual icon background colours */
+
 .icon-lock   { background: linear-gradient(135deg, #f0e6ff, #ddd0f8); }
 .icon-media  { background: linear-gradient(135deg, #ffe0e8, #f9c5b0); }
 .icon-group  { background: linear-gradient(135deg, #d8f0ff, #b8dfff); }
@@ -268,7 +268,7 @@ body {
   color: var(--rose);
 }
 
-/* HOW IT WORKS SECTION */
+
 .how-section {
   padding: 50px 40px 60px;
   background: linear-gradient(180deg, var(--cloud-white) 0%, #fdf1f6 100%);
@@ -282,7 +282,7 @@ body {
   margin-bottom: 40px;
 }
 
-/* Steps row */
+
 .steps-row {
   display: flex;
   align-items: center;
@@ -327,7 +327,7 @@ body {
   margin: 0 10px;
 }
 
-/* Big CTA button */
+
 .cta-wrap {
   text-align: center;
   margin-top: 44px;

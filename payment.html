@@ -300,12 +300,12 @@
       </div>
     </div>
 
-    <p class="err-msg" id="payErr">⚠️ Please fill in all card details correctly.</p>
+    <p class="err-msg" id="payErr">Please fill in all card details correctly.</p>
 
     <button class="btn-pay" id="payBtn" onclick="payNow()">
       Pay ₹<span id="payAmount">0</span> →
     </button>
-    <p class="secure-note">🔒 256-bit SSL encrypted · Your data is safe</p>
+    <p class="secure-note"> 256-bit SSL encrypted · Your data is safe</p>
   </div>
 
   <!-- ══ RIGHT: Order Summary ══ -->
@@ -385,17 +385,17 @@
     const err    = document.getElementById('payErr');
 
     if (!num || !name || !expiry || !cvv) {
-      err.innerText = '⚠️ Please fill in all card details.';
+      err.innerText = 'Please fill in all card details.';
       err.classList.add('show');
       return;
     }
     if (num.length < 12) {
-      err.innerText = '❌ Invalid card number.';
+      err.innerText = 'Invalid card number.';
       err.classList.add('show');
       return;
     }
     if (cvv.length < 3) {
-      err.innerText = '❌ Invalid CVV.';
+      err.innerText = ' Invalid CVV.';
       err.classList.add('show');
       return;
     }
@@ -404,9 +404,9 @@
     // Save plan to localStorage
     localStorage.setItem('plan', plan);
 
-    alert('✅ Payment Successful! Welcome to Memory Capsule ' + planLabel + ' Plan 🎉');
+    alert(' Payment Successful! Welcome to Memory Capsule ' + planLabel + ' Plan 🎉');
 
-    // ✅ After payment → go to landing page
+    // Redirect to landing page
     window.location.href = 'landing.html';
   }
 </script>

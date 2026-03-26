@@ -3,26 +3,22 @@
 
 $(document).ready(function () {
 
-  /* 1. FEATURE CARDS – cursor pointer on hover
-        (jQuery example: could add more logic here
-        e.g. tooltip, ripple effect, etc.) */
+  /* 1. FEATURE CARDS – cursor pointer on hover */
   $('.feature-card').on('mouseenter', function () {
     $(this).css('cursor', 'pointer');
   });
 
-  /* 2. STEP REVEAL – animate steps into view
-        when the How It Works section scrolls in
-        (Vanilla JS IntersectionObserver) */
+ 
   const steps = document.querySelectorAll('.step');
 
-  // Set initial hidden state
+  
   steps.forEach(function (s) {
     s.style.opacity = '0';
     s.style.transform = 'translateY(20px)';
     s.style.transition = 'opacity .5s ease, transform .5s ease';
   });
 
-  // Observe and reveal with stagger
+  
   const stepObserver = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (entry.isIntersecting) {
@@ -32,7 +28,7 @@ $(document).ready(function () {
             s.style.transform = 'translateY(0)';
           }, i * 160);
         });
-        stepObserver.disconnect(); // run once
+        stepObserver.disconnect(); 
       }
     });
   }, { threshold: 0.3 });
@@ -42,9 +38,7 @@ $(document).ready(function () {
     stepObserver.observe(howSection);
   }
 
-  /* 3. BUTTON RIPPLE EFFECT
-        Adds a quick ripple on all primary buttons
-        when clicked for tactile feedback */
+
   $('.btn-capsule, .btn-cta-big').on('click', function (e) {
     const $btn = $(this);
     const offset = $btn.offset();
@@ -65,23 +59,21 @@ $(document).ready(function () {
       opacity: '1'
     });
 
-    // Button must be relative for ripple positioning
+    
     $btn.css('position', 'relative').css('overflow', 'hidden').append($ripple);
 
-    // Trigger animation on next tick
+    
     setTimeout(function () {
       $ripple.css({ transform: 'scale(30)', opacity: '0' });
     }, 10);
 
-    // Remove ripple element after animation completes
+    
     setTimeout(function () {
       $ripple.remove();
     }, 450);
   });
 
-  /* 4. SMOOTH SCROLL
-        If any in-page anchor links are added later,
-        this handles smooth scrolling automatically */
+
   $('a[href^="#"]').on('click', function (e) {
     const target = $(this.getAttribute('href'));
     if (target.length) {
