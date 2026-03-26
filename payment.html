@@ -1,260 +1,414 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Premium Payment UI</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MemoryCapsule – Payment</title>
 
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
-}
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-/* Smooth animated gradient background */
-body {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a18cd1, #fbc2eb);
-    background-size: 400% 400%;
-    animation: gradientBG 10s ease infinite;
-    overflow: hidden;
-}
+  <style>
+    * {
+      margin: 0; padding: 0;
+      box-sizing: border-box;
+    }
 
-@keyframes gradientBG {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
-}
+    body {
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(-45deg, #ffd6e0, #fad0c4, #e8d5f5, #fbc2eb);
+      background-size: 400% 400%;
+      animation: gradientBG 10s ease infinite;
+      padding: 20px;
+    }
 
-/* glow circles */
-body::before, body::after {
-    content: "";
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(120px);
-}
+    @keyframes gradientBG {
+      0%   { background-position: 0% 50%;   }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%;   }
+    }
 
-body::before {
-    width: 500px;
-    height: 500px;
-    background: #a18cd1;
-    top: -150px;
-    left: -150px;
-}
+    /* Glow blobs */
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::before {
+      width: 420px; height: 420px;
+      background: #e8d5f5;
+      top: -120px; left: -120px;
+    }
+    body::after {
+      width: 420px; height: 420px;
+      background: #fbc2eb;
+      bottom: -120px; right: -120px;
+    }
 
-body::after {
-    width: 500px;
-    height: 500px;
-    background: #fbc2eb;
-    bottom: -150px;
-    right: -150px;
-}
+    /* ── Main card ── */
+    .pay-card {
+      width: 100%;
+      max-width: 980px;
+      display: flex;
+      border-radius: 28px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(28px);
+      box-shadow: 0 32px 80px rgba(180,100,140,.28);
+      position: relative;
+      z-index: 1;
+      transition: transform .3s;
+    }
+    .pay-card:hover { transform: translateY(-3px); }
 
-/* MAIN BOX - EVEN BIGGER */
-.container {
-    width: 1300px;
-    height: 700px;
-    display: flex;
-    border-radius: 30px;
-    overflow: hidden;
-    z-index: 1;
+    /* ── Left: payment form ── */
+    .pay-left {
+      width: 58%;
+      padding: 52px 48px;
+    }
 
-    background: rgba(255,255,255,0.2);
-    backdrop-filter: blur(30px);
+    .pay-left h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.65rem;
+      color: #2d1f2e;
+      margin-bottom: 6px;
+    }
+    .pay-left .sub-text {
+      font-size: .85rem;
+      color: #6b4f6e;
+      margin-bottom: 30px;
+    }
 
-    box-shadow: 0 40px 100px rgba(0,0,0,0.4);
-    transition: 0.4s;
-}
+    /* Payment method tabs */
+    .pay-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .pay-tab {
+      padding: 9px 18px;
+      background: rgba(255,255,255,.75);
+      border: 1.5px solid rgba(232,115,138,.2);
+      border-radius: 22px;
+      cursor: pointer;
+      font-size: .85rem;
+      font-weight: 500;
+      color: #2d1f2e;
+      transition: background .2s, border-color .2s, color .2s;
+    }
+    .pay-tab:hover,
+    .pay-tab.active {
+      background: linear-gradient(135deg, #e8738a, #c95570);
+      border-color: transparent;
+      color: #fff;
+    }
 
-.container:hover {
-    transform: scale(1.02);
-}
+    /* Input fields */
+    .input-row {
+      margin-bottom: 18px;
+    }
+    .input-row label {
+      display: block;
+      font-size: .78rem;
+      font-weight: 600;
+      color: #6b4f6e;
+      margin-bottom: 6px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .input-row input {
+      width: 100%;
+      background: #f7eef4;
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      padding: 13px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .92rem;
+      color: #2d1f2e;
+      outline: none;
+      transition: border-color .2s, background .2s;
+    }
+    .input-row input:focus {
+      border-color: #e8738a;
+      background: #fff;
+    }
+    .input-split {
+      display: flex;
+      gap: 14px;
+    }
+    .input-split .input-row { flex: 1; }
 
-/* LEFT */
-.left {
-    width: 60%;
-    padding: 60px;
-}
+    /* Pay button */
+    .btn-pay {
+      width: 100%;
+      margin-top: 10px;
+      padding: 16px;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #e8738a 0%, #c95570 100%);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: .02em;
+      box-shadow: 0 8px 24px rgba(201,85,112,.38);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-pay:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 14px 36px rgba(201,85,112,.48);
+    }
 
-.tabs {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 35px;
-}
+    .secure-note {
+      text-align: center;
+      margin-top: 14px;
+      font-size: .8rem;
+      color: #a07baa;
+    }
 
-.tab {
-    padding: 12px 20px;
-    background: rgba(255,255,255,0.8);
-    border-radius: 25px;
-    cursor: pointer;
-    transition: 0.3s;
-}
+    /* ── Right: order summary ── */
+    .pay-right {
+      width: 42%;
+      padding: 52px 40px;
+      background: rgba(255,255,255,.38);
+      border-left: 1.5px solid rgba(232,115,138,.12);
+      display: flex;
+      flex-direction: column;
+    }
 
-.tab:hover {
-    background: #7b5cff;
-    color: white;
-}
+    .pay-right h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      color: #2d1f2e;
+      margin-bottom: 28px;
+    }
 
-.input-group {
-    margin-bottom: 25px;
-}
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(232,115,138,.15);
+    }
+    .summary-item:last-of-type { border-bottom: none; }
 
-input {
-    width: 100%;
-    padding: 16px;
-    border-radius: 14px;
-    border: none;
-    outline: none;
-    font-size: 15px;
-    background: rgba(255,255,255,0.95);
-}
+    .summary-item .item-name {
+      font-weight: 600;
+      font-size: .92rem;
+      color: #2d1f2e;
+    }
+    .summary-item .item-desc {
+      font-size: .78rem;
+      color: #a07baa;
+      margin-top: 3px;
+    }
+    .summary-item .item-price {
+      font-weight: 700;
+      font-size: .95rem;
+      color: #e8738a;
+      white-space: nowrap;
+      margin-left: 12px;
+    }
 
-.row {
-    display: flex;
-    gap: 20px;
-}
+    .summary-total {
+      margin-top: auto;
+      padding-top: 22px;
+      border-top: 2px solid rgba(232,115,138,.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .summary-total span:first-child {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: #2d1f2e;
+    }
+    .summary-total span:last-child {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #c95570;
+    }
 
-/* BUTTON */
-.pay-btn {
-    width: 100%;
-    margin-top: 35px;
-    padding: 18px;
-    border-radius: 40px;
-    border: none;
-    background: linear-gradient(135deg, #7b5cff, #a18cd1);
-    color: white;
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
+    .plan-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #e8738a, #c95570);
+      color: #fff;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
 
-.pay-btn:hover {
-    transform: scale(1.08);
-    box-shadow: 0 20px 40px rgba(123,92,255,0.6);
-}
-
-.secure {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 14px;
-}
-
-/* RIGHT */
-.right {
-    width: 40%;
-    padding: 60px;
-    background: rgba(255,255,255,0.25);
-}
-
-.right h2 {
-    margin-bottom: 35px;
-    font-size: 26px;
-}
-
-.item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 22px;
-}
-
-.item small {
-    display: block;
-    color: gray;
-}
-
-.total {
-    margin-top: 50px;
-    font-size: 24px;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-}
-
-</style>
+    /* Error */
+    .err-msg {
+      color: #c95570;
+      font-size: .8rem;
+      margin-top: 6px;
+      display: none;
+    }
+    .err-msg.show { display: block; }
+  </style>
 </head>
-
 <body>
 
-<div class="container">
+<div class="pay-card">
 
-    <!-- LEFT -->
-    <div class="left">
-        <div class="tabs">
-            <div class="tab">💳 Card</div>
-            <div class="tab">🅿 PayPal</div>
-            <div class="tab">₿ Crypto</div>
-            <div class="tab">📱 GPay</div>
-        </div>
+  <!-- ══ LEFT: Payment Form ══ -->
+  <div class="pay-left">
+    <h2>Complete Payment</h2>
+    <p class="sub-text">Secure checkout powered by MemoryCapsule</p>
 
-        <div class="input-group">
-            <input type="text" id="card" placeholder="Card Number">
-        </div>
-
-        <div class="input-group">
-            <input type="text" id="name" placeholder="Card Holder Name">
-        </div>
-
-        <div class="row">
-            <input type="text" id="date" placeholder="MM/YY">
-            <input type="text" id="cvv" placeholder="CVV">
-        </div>
-
-        <button class="pay-btn" onclick="payNow()">Pay Now $10.99</button>
-
-        <div class="secure">🔒 Secure Payment</div>
+    <!-- Payment method tabs -->
+    <div class="pay-tabs">
+      <div class="pay-tab active" onclick="setTab(this)">💳 Card</div>
+      <div class="pay-tab" onclick="setTab(this)">🅿 PayPal</div>
+      <div class="pay-tab" onclick="setTab(this)">₿ Crypto</div>
+      <div class="pay-tab" onclick="setTab(this)">📱 GPay</div>
     </div>
 
-    <!-- RIGHT -->
-    <div class="right">
-        <h2>Summary</h2>
-
-        <div class="item">
-            <div>144Hz gaming monitor <small>Qty: 1</small></div>
-            <div>£1,399.98</div>
-        </div>
-
-        <div class="item">
-            <div>Wireless mouse <small>Qty: 1</small></div>
-            <div>£149.99</div>
-        </div>
-
-        <div class="item">
-            <div>Mechanical keyboard <small>Qty: 1</small></div>
-            <div>£199.99</div>
-        </div>
-
-        <div class="total">
-            <span>Total</span>
-            <span>£1,749.96</span>
-        </div>
+    <!-- Card inputs -->
+    <div class="input-row">
+      <label>Card Number</label>
+      <input type="text" id="cardNum" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)">
     </div>
+    <div class="input-row">
+      <label>Card Holder Name</label>
+      <input type="text" id="cardName" placeholder="Name as on card">
+    </div>
+    <div class="input-split">
+      <div class="input-row">
+        <label>Expiry</label>
+        <input type="text" id="cardExpiry" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)">
+      </div>
+      <div class="input-row">
+        <label>CVV</label>
+        <input type="text" id="cardCvv" placeholder="• • •" maxlength="3">
+      </div>
+    </div>
+
+    <p class="err-msg" id="payErr">⚠️ Please fill in all card details correctly.</p>
+
+    <button class="btn-pay" id="payBtn" onclick="payNow()">
+      Pay ₹<span id="payAmount">0</span> →
+    </button>
+    <p class="secure-note">🔒 256-bit SSL encrypted · Your data is safe</p>
+  </div>
+
+  <!-- ══ RIGHT: Order Summary ══ -->
+  <div class="pay-right">
+    <div class="plan-badge" id="planBadge">Pro Plan</div>
+    <h3>Order Summary</h3>
+
+    <div class="summary-item">
+      <div>
+        <div class="item-name" id="summaryPlanName">Memory Capsule Pro</div>
+        <div class="item-desc">Monthly subscription · Billed every 30 days</div>
+      </div>
+      <div class="item-price" id="summaryPrice">₹299</div>
+    </div>
+
+    <div class="summary-item">
+      <div>
+        <div class="item-name">Unlimited Capsules</div>
+        <div class="item-desc">Store as many memories as you want</div>
+      </div>
+      <div class="item-price">✓</div>
+    </div>
+
+    <div class="summary-item">
+      <div>
+        <div class="item-name">Full Media Support</div>
+        <div class="item-desc">Photos, videos, audio &amp; more</div>
+      </div>
+      <div class="item-price">✓</div>
+    </div>
+
+    <div class="summary-total">
+      <span>Total Due</span>
+      <span id="summaryTotal">₹299 / mo</span>
+    </div>
+  </div>
 
 </div>
 
 <script>
-function payNow() {
-    let card = document.getElementById("card").value;
-    let name = document.getElementById("name").value;
-    let date = document.getElementById("date").value;
-    let cvv = document.getElementById("cvv").value;
+  /* ── Read plan & price from URL params ── */
+  const params   = new URLSearchParams(window.location.search);
+  const plan     = params.get('plan')  || localStorage.getItem('selectedPlan')  || 'pro';
+  const price    = params.get('price') || localStorage.getItem('selectedPrice') || '299';
+  const planLabel = plan.charAt(0).toUpperCase() + plan.slice(1);
 
-    if(card === "" || name === "" || date === "" || cvv === "") {
-        alert("⚠️ Please fill all details!");
-        return;
+  // Populate summary panel
+  document.getElementById('planBadge').innerText      = planLabel + ' Plan';
+  document.getElementById('summaryPlanName').innerText = 'Memory Capsule ' + planLabel;
+  document.getElementById('summaryPrice').innerText   = '₹' + price;
+  document.getElementById('summaryTotal').innerText   = '₹' + price + ' / mo';
+  document.getElementById('payAmount').innerText      = price;
+
+  /* ── Payment method tab toggle ── */
+  function setTab(el) {
+    document.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  /* ── Input formatters ── */
+  function formatCard(el) {
+    let v = el.value.replace(/\D/g, '').substring(0, 16);
+    el.value = v.replace(/(.{4})/g, '$1 ').trim();
+  }
+  function formatExpiry(el) {
+    let v = el.value.replace(/\D/g, '').substring(0, 4);
+    if (v.length >= 3) v = v.substring(0, 2) + ' / ' + v.substring(2);
+    el.value = v;
+  }
+
+  /* ── Pay Now ── */
+  function payNow() {
+    const num    = document.getElementById('cardNum').value.replace(/\s/g, '');
+    const name   = document.getElementById('cardName').value.trim();
+    const expiry = document.getElementById('cardExpiry').value.trim();
+    const cvv    = document.getElementById('cardCvv').value.trim();
+    const err    = document.getElementById('payErr');
+
+    if (!num || !name || !expiry || !cvv) {
+      err.innerText = '⚠️ Please fill in all card details.';
+      err.classList.add('show');
+      return;
     }
-
-    if(card.length < 12) {
-        alert("❌ Invalid Card Number");
-        return;
+    if (num.length < 12) {
+      err.innerText = '❌ Invalid card number.';
+      err.classList.add('show');
+      return;
     }
+    if (cvv.length < 3) {
+      err.innerText = '❌ Invalid CVV.';
+      err.classList.add('show');
+      return;
+    }
+    err.classList.remove('show');
 
-    alert("✅ Payment Successful!");
-}
+    // Save plan to localStorage
+    localStorage.setItem('plan', plan);
+
+    alert('✅ Payment Successful! Welcome to Memory Capsule ' + planLabel + ' Plan 🎉');
+
+    // ✅ After payment → go to landing page
+    window.location.href = 'landing.html';
+  }
 </script>
 
 </body>

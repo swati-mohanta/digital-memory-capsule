@@ -1,8 +1,8 @@
-/* ═══════════════════════════════════════════════
+/* 
    style.css  –  MemoryCapsule Landing Page
-   ═══════════════════════════════════════════════ */
+ */
 
-/* ── CSS Variables / Design Tokens ─────────────── */
+/* CSS Variables / Design Tokens */
 :root {
   --peach-light : #fde8e0;
   --peach-mid   : #f9c5b0;
@@ -16,7 +16,7 @@
   --text-soft   : #a07baa;
 }
 
-/* ── Reset ──────────────────────────────────────── */
+/* Reset */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -30,9 +30,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ════════════════════════════════════════════════
-   HERO SECTION
-   ════════════════════════════════════════════════ */
+/* HERO SECTION */
 .hero {
   position: relative;
   min-height: 480px;
@@ -76,7 +74,7 @@ body {
   right: -8%;
 }
 
-/* ── Balloons ───────────────────────────────────── */
+/* Balloons */
 .balloon {
   position: absolute;
   pointer-events: none;
@@ -97,7 +95,7 @@ body {
   to   { transform: translateY(-18px) rotate(3deg);  }
 }
 
-/* ── Hero Text ──────────────────────────────────── */
+/* Hero Text */
 .hero-tag {
   font-family: 'DM Sans', sans-serif;
   font-size: .75rem;
@@ -149,7 +147,7 @@ body {
   to   { opacity: 1; transform: translateY(0);    }
 }
 
-/* ── Hero Buttons ───────────────────────────────── */
+/* Hero Buttons */
 .btn-capsule {
   background: linear-gradient(135deg, #e8738a 0%, #c95570 100%);
   color: #fff;
@@ -193,7 +191,7 @@ body {
   color: var(--text-dark);
 }
 
-/* ── Cloud divider at hero bottom ───────────────── */
+/* Cloud divider at hero bottom */
 .cloud-divider {
   position: absolute;
   bottom: -2px;
@@ -209,9 +207,7 @@ body {
   mask-size: cover;
 }
 
-/* ════════════════════════════════════════════════
-   FEATURE CARDS SECTION
-   ════════════════════════════════════════════════ */
+/* FEATURE CARDS SECTION */
 .features-section {
   padding: 50px 40px 20px;
   background: var(--cloud-white);
@@ -272,9 +268,7 @@ body {
   color: var(--rose);
 }
 
-/* ════════════════════════════════════════════════
-   HOW IT WORKS SECTION
-   ════════════════════════════════════════════════ */
+/* HOW IT WORKS SECTION */
 .how-section {
   padding: 50px 40px 60px;
   background: linear-gradient(180deg, var(--cloud-white) 0%, #fdf1f6 100%);
@@ -333,7 +327,7 @@ body {
   margin: 0 10px;
 }
 
-/* ── Big CTA button ─────────────────────────────── */
+/* Big CTA button */
 .cta-wrap {
   text-align: center;
   margin-top: 44px;

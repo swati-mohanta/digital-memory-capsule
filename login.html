@@ -1,136 +1,336 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Auth UI</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MemoryCapsule – Login / Sign Up</title>
 
-<link href="https://fonts.googleapis.com/css?family=Montserrat:400,800" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-<style>
-body {
-  background: #f6f5f7;
-  font-family: 'Montserrat', sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
+  <style>
+    :root {
+      --rose      : #e8738a;
+      --rose-dark : #c95570;
+      --cloud     : #fff8f5;
+      --text-dark : #2d1f2e;
+      --text-mid  : #6b4f6e;
+    }
 
-.container {
-  background: #fff;
-  border-radius: 10px;
-  width: 768px;
-  height: 500px;
-  display: flex;
-  overflow: hidden;
-  position: relative;
-}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* Forms */
-.form-container {
-  width: 50%;
-  padding: 50px;
-  text-align: center;
-  transition: all 0.6s ease-in-out;
-}
+    body {
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background:
+        radial-gradient(ellipse 70% 50% at 20% 80%, #fde8e0 0%, transparent 60%),
+        radial-gradient(ellipse 70% 50% at 80% 20%, #e8d5f5 0%, transparent 60%),
+        linear-gradient(150deg, #fce8f3 0%, #fad4e8 40%, #f0d4f8 70%, #dde8f8 100%);
+      padding: 20px;
+    }
 
-input {
-  background: #eee;
-  border: none;
-  padding: 10px;
-  margin: 8px 0;
-  width: 100%;
-}
+    /* ── Card wrapper ── */
+    .auth-card {
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(18px);
+      border-radius: 28px;
+      width: 820px;
+      min-height: 520px;
+      display: flex;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(180,100,140,.22);
+      position: relative;
+    }
 
-button {
-  border-radius: 20px;
-  border: none;
-  background-color: #ff4b2b;
-  color: white;
-  padding: 12px 45px;
-  cursor: pointer;
-}
+    /* ── Form panes ── */
+    .form-pane {
+      width: 50%;
+      padding: 52px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: transform .6s ease, opacity .6s ease;
+      position: absolute;
+      top: 0; bottom: 0;
+    }
 
-/* Overlay */
-.overlay {
-  background: linear-gradient(to right, #ff416c, #ff4b2b);
-  color: white;
-  position: absolute;
-  width: 50%;
-  height: 100%;
-  left: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  text-align: center;
-  transition: all 0.6s ease-in-out;
-}
+    .login-pane  { left: 0; transform: translateX(0); opacity: 1; pointer-events: auto; }
+    .signup-pane { left: 0; transform: translateX(-100%); opacity: 0; pointer-events: none; }
 
-/* Animation classes */
-.container.active .overlay {
-  transform: translateX(-100%);
-}
+    .auth-card.show-signup .login-pane  { transform: translateX(100%); opacity: 0; pointer-events: none; }
+    .auth-card.show-signup .signup-pane { transform: translateX(0);    opacity: 1; pointer-events: auto; }
 
-.container.active .signup {
-  transform: translateX(100%);
-}
+    .form-pane h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      font-size: .85rem;
+      color: var(--text-mid);
+      margin-bottom: 28px;
+    }
 
-.container.active .login {
-  transform: translateX(-100%);
-}
+    .field {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .field i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-mid);
+      font-size: 1rem;
+    }
+    .field input {
+      width: 100%;
+      background: #f7eef4;
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      padding: 12px 14px 12px 40px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .92rem;
+      color: var(--text-dark);
+      outline: none;
+      transition: border-color .2s, background .2s;
+    }
+    .field input:focus {
+      border-color: var(--rose);
+      background: #fff;
+    }
 
-h1 {
-  margin-bottom: 20px;
-}
-</style>
+    .btn-auth {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #e8738a, #c95570);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .97rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 6px;
+      box-shadow: 0 6px 20px rgba(201,85,112,.32);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-auth:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(201,85,112,.42);
+    }
+
+    .switch-hint {
+      margin-top: 18px;
+      text-align: center;
+      font-size: .82rem;
+      color: var(--text-mid);
+    }
+    .switch-hint a {
+      color: var(--rose);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .switch-hint a:hover { text-decoration: underline; }
+
+    .err-msg {
+      color: #c95570;
+      font-size: .8rem;
+      margin-top: -8px;
+      margin-bottom: 10px;
+      display: none;
+    }
+    .err-msg.show { display: block; }
+
+    /* ── Overlay panel ── */
+    .overlay-pane {
+      width: 50%;
+      margin-left: auto;
+      flex-shrink: 0;
+      background: linear-gradient(145deg, #e8738a 0%, #c95570 55%, #b04468 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 52px 36px;
+      transition: transform .6s ease;
+      position: relative;
+      z-index: 2;
+      border-radius: 0 28px 28px 0;
+    }
+
+    .auth-card.show-signup .overlay-pane {
+      transform: translateX(-100%);
+      border-radius: 28px 0 0 28px;
+    }
+
+    .overlay-balloon {
+      font-size: 3.2rem;
+      margin-bottom: 18px;
+      animation: floatB 4s ease-in-out infinite alternate;
+    }
+    @keyframes floatB {
+      from { transform: translateY(0) rotate(-4deg); }
+      to   { transform: translateY(-14px) rotate(4deg); }
+    }
+
+    .overlay-pane h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .overlay-pane p {
+      font-size: .88rem;
+      color: rgba(255,255,255,.88);
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .btn-overlay {
+      background: rgba(255,255,255,.18);
+      border: 2px solid rgba(255,255,255,.75);
+      color: #fff;
+      padding: 10px 30px;
+      border-radius: 30px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: .9rem;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+    .btn-overlay:hover {
+      background: rgba(255,255,255,.32);
+      transform: translateY(-2px);
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="container" id="container">
+<div class="auth-card" id="authCard">
 
-  <!-- SIGN UP -->
-  <div class="form-container signup">
-    <h1>Create Account</h1>
+  <!-- ══ LOGIN PANE ══ -->
+  <div class="form-pane login-pane">
+    <h2>Welcome Back 👋</h2>
+    <p class="subtitle">Sign in to continue your memory journey</p>
 
-    <input type="text" placeholder="Name">
-    <input type="email" placeholder="Email">
-    <input type="password" placeholder="Password">
+    <div class="field">
+      <i class="bi bi-envelope"></i>
+      <input type="email" id="loginEmail" placeholder="Email address">
+    </div>
+    <div class="field">
+      <i class="bi bi-lock"></i>
+      <input type="password" id="loginPassword" placeholder="Password">
+    </div>
+    <p class="err-msg" id="loginErr">Please enter your email and password.</p>
 
-    <button onclick="handleSignup()">Sign Up</button>
+    <button class="btn-auth" onclick="handleLogin()">Sign In</button>
+
+    <p class="switch-hint">
+      Don't have an account? <a onclick="showSignup()">Create one</a>
+    </p>
   </div>
 
-  <!-- LOGIN -->
-  <div class="form-container login">
-    <h1>Sign In</h1>
+  <!-- ══ SIGN UP PANE ══ -->
+  <div class="form-pane signup-pane">
+    <h2>Create Account ✨</h2>
+    <p class="subtitle">Start preserving your memories today</p>
 
-    <input type="email" placeholder="Email">
-    <input type="password" placeholder="Password">
+    <div class="field">
+      <i class="bi bi-person"></i>
+      <input type="text" id="signupName" placeholder="Your name">
+    </div>
+    <div class="field">
+      <i class="bi bi-envelope"></i>
+      <input type="email" id="signupEmail" placeholder="Email address">
+    </div>
+    <div class="field">
+      <i class="bi bi-lock"></i>
+      <input type="password" id="signupPassword" placeholder="Create a password">
+    </div>
+    <p class="err-msg" id="signupErr">Please fill in all fields.</p>
 
-    <button>Sign In</button>
+    <button class="btn-auth" onclick="handleSignup()">Sign Up</button>
+
+    <p class="switch-hint">
+      Already have an account? <a onclick="showLogin()">Sign in</a>
+    </p>
   </div>
 
-  <!-- OVERLAY -->
-  <div class="overlay">
-    <h1 id="overlayTitle">Hello, Friend!</h1>
-    <p id="overlayText">Sign up to start your journey</p>
+  <!-- ══ OVERLAY ══ -->
+  <div class="overlay-pane">
+    <div class="overlay-balloon" id="overlayBalloon">🎈</div>
+    <h3 id="overlayTitle">Hello, Friend!</h3>
+    <p id="overlayText">Enter your details and start preserving your most precious memories.</p>
+    <button class="btn-overlay" id="overlayBtn" onclick="showSignup()">Sign Up</button>
   </div>
 
 </div>
 
 <script>
-function handleSignup() {
-  // simulate validation
-  alert("Account Created Successfully!");
+  const card = document.getElementById('authCard');
 
-  // trigger animation
-  document.getElementById("container").classList.add("active");
+  function showSignup() {
+    card.classList.add('show-signup');
+    document.getElementById('overlayBalloon').innerText = '💌';
+    document.getElementById('overlayTitle').innerText   = 'Welcome Back!';
+    document.getElementById('overlayText').innerText    = 'Already have an account? Sign in and relive your memories.';
+    document.getElementById('overlayBtn').innerText     = 'Sign In';
+    document.getElementById('overlayBtn').onclick       = showLogin;
+  }
 
-  // change overlay text
-  document.getElementById("overlayTitle").innerText = "Welcome Back!";
-  document.getElementById("overlayText").innerText = "Please login with your details";
-}
+  function showLogin() {
+    card.classList.remove('show-signup');
+    document.getElementById('overlayBalloon').innerText = '🎈';
+    document.getElementById('overlayTitle').innerText   = 'Hello, Friend!';
+    document.getElementById('overlayText').innerText    = 'Enter your details and start preserving your most precious memories.';
+    document.getElementById('overlayBtn').innerText     = 'Sign Up';
+    document.getElementById('overlayBtn').onclick       = showSignup;
+  }
+
+  function handleSignup() {
+    const name  = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const pass  = document.getElementById('signupPassword').value.trim();
+    const err   = document.getElementById('signupErr');
+
+    if (!name || !email || !pass) {
+      err.classList.add('show');
+      return;
+    }
+    err.classList.remove('show');
+
+    // Persist basic session
+    localStorage.setItem('userName', name);
+    localStorage.setItem('userEmail', email);
+    localStorage.setItem('isLoggedIn', 'true');
+
+    // ✅ After signup → choose a plan
+    window.location.href = 'subscription.html';
+  }
+
+  function handleLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass  = document.getElementById('loginPassword').value.trim();
+    const err   = document.getElementById('loginErr');
+
+    if (!email || !pass) {
+      err.classList.add('show');
+      return;
+    }
+    err.classList.remove('show');
+
+    localStorage.setItem('isLoggedIn', 'true');
+
+    // ✅ After login → choose a plan
+    window.location.href = 'subscription.html';
+  }
 </script>
 
 </body>
